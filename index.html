@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Trabalho 4 - Matheus Azzi</title>
+    <style>
+      body {
+        padding: 20px;
+        font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans",
+          Geneva, Arial, sans-serif;
+      }
+
+      .pull-left {
+        margin: 10px;
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      button {
+        padding: 8px;
+      }
+
+      p {
+        font-weight: bold;
+        font-size: 18px;
+      }
+
+      .small {
+        color: #666;
+        font-weight: 400;
+        padding-top: 10px;
+        text-transform: none;
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button onclick="transform('holt')">Aplicar Holt</button>
+
+    <br />
+    <br />
+
+    <p>
+      Upload de imagem quadrada:
+      <input type="file" accept="image/*" onchange="drawOriginal(event)" />
+      <small class="small">* Fundo preto para dilatação e erosão.</small>
+      <small class="small"
+        >* Para Holt use imagem preta com fundo branco.</small
+      >
+    </p>
+
+    <img id="original" style="display: none" />
+
+    <div class="pull-left">
+      <p>Original</p>
+      <canvas id="original-canvas"></canvas>
+    </div>
+
+    <div class="pull-left">
+      <p id="type"></p>
+      <canvas id="new-canvas"></canvas>
+    </div>
+
+    <script src="vendor/lodash.js"></script>
+
+    <script src="transformations.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
