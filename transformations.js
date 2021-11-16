@@ -1,3 +1,5 @@
+
+const lodash = _;
 const isBlack = (color) => color < 255
 const isEdge = (newMatrix, x, y) => {
   var NO = newMatrix[x-1][y-1][0];
@@ -59,13 +61,13 @@ const isEdge = (newMatrix, x, y) => {
 var transformations = {}
 
 transformations.holt = (pixels) => {
-  var matrix = _
+  var matrix = lodash
     .chain(pixels)
     .chunk(4)
     .chunk(image.width)
     .value()
 
-  var newMatrix = _.cloneDeep(matrix)
+  var newMatrix = lodash.cloneDeep(matrix)
 
   var removeList = []
   var noPixelsDeleted = false
@@ -125,5 +127,5 @@ transformations.holt = (pixels) => {
     removeList = []
   }
 
-  return _.flattenDeep(newMatrix)
+  return lodash.flattenDeep(newMatrix)
 }
