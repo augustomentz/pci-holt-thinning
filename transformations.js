@@ -1,57 +1,64 @@
 
 const lodash = _;
-const isBlack = (color) => color < 255
-const isEdge = (newMatrix, x, y) => {
-  var NO = newMatrix[x-1][y-1][0];
-  var N = newMatrix[x][y-1][0];
-  var NE = newMatrix[x+1][y-1][0];
-  var O = newMatrix[x-1][y][0];
-  var L = newMatrix[x+1][y][0];
-  var SO = newMatrix[x-1][y+1][0];
-  var S = newMatrix[x][y+1][0];
-  var SE = newMatrix[x+1][y+1][0];
+const checkIfPixelIsBlack = (color) => color < 255
 
-  let vizinhos = isBlack(NO) + isBlack(N) + isBlack(NE) + isBlack(O) + isBlack(L) + isBlack(SO) + isBlack(S) + isBlack(SE);
+const isEdge = (matrix, x, y) => {
+  var L = matrix[ x + 1][y][0];
+  var SO = matrix[x - 1][y + 1][0];
+  var S = matrix[x][y + 1][0];
+  var SE = matrix[x + 1][y + 1][0];
+  var NO = matrix[x - 1][y - 1][0];
+  var N = matrix[x][y - 1][0];
+  var NE = matrix[x + 1][y - 1][0];
+  var O = matrix[x - 1][y][0];
 
-  if (vizinhos < 2 || vizinhos > 6) {
-    return false;
+  let neighbors = 
+  checkIfPixelIsBlack(NO) + 
+  checkIfPixelIsBlack(N) + 
+  checkIfPixelIsBlack(NE) + 
+  checkIfPixelIsBlack(O) + 
+  checkIfPixelIsBlack(L) + 
+  checkIfPixelIsBlack(SO) + 
+  checkIfPixelIsBlack(S) + 
+  checkIfPixelIsBlack(SE);
+
+  if (neighbors < 2 || neighbors > 6) return false;
+    
+  let connectivity = 0;
+
+  if (!checkIfPixelIsBlack(N) && checkIfPixelIsBlack(NE)) {
+    connectivity++;
   }
 
-  let conectividade = 0;
-
-  if (!isBlack(N) && isBlack(NE)) {
-    conectividade++;
+  if (!checkIfPixelIsBlack(NE) && checkIfPixelIsBlack(L)) {
+    connectivity++;
   }
 
-  if (!isBlack(NE) && isBlack(L)) {
-    conectividade++;
+  if (!checkIfPixelIsBlack(L) && checkIfPixelIsBlack(SE)) {
+    connectivity++;
   }
 
-  if (!isBlack(L) && isBlack(SE)) {
-    conectividade++;
+  if (!checkIfPixelIsBlack(SE) && checkIfPixelIsBlack(S)) {
+    connectivity++;
   }
 
-  if (!isBlack(SE) && isBlack(S)) {
-    conectividade++;
+  if (!checkIfPixelIsBlack(S) && checkIfPixelIsBlack(SO)) {
+    connectivity++;
   }
 
-  if (!isBlack(S) && isBlack(SO)) {
-    conectividade++;
+  if (!checkIfPixelIsBlack(SO) && checkIfPixelIsBlack(O)) {
+    connectivity++;
   }
 
-  if (!isBlack(SO) && isBlack(O)) {
-    conectividade++;
+  if (!checkIfPixelIsBlack(O) && checkIfPixelIsBlack(NO)) {
+    connectivity++;
   }
 
-  if (!isBlack(O) && isBlack(NO)) {
-    conectividade++;
+  if (!checkIfPixelIsBlack(NO) && checkIfPixelIsBlack(N)) {
+    connectivity++;
   }
 
-  if (!isBlack(NO) && isBlack(N)) {
-    conectividade++;
-  }
-
-  if (conectividade == 1) {
+  if (connectivity == 1) {
     return true;
   } else {
     return false;
@@ -74,28 +81,26 @@ transformations.holt = (pixels) => {
 
   while (noPixelsDeleted == false) {
     noPixelsDeleted = true
-    console.log('Iteração')
 
     for (let y = 1; y < image.height-1; y++) {
       for (let x = 1; x < image.width-1; x++) {
         let color = newMatrix[x][y][0]
 
-        if (isBlack(color)) {
+        if (checkIfPixelIsBlack(color)) {
           let L = newMatrix[x+1][y][0]
           let S = newMatrix[x][y+1][0]
           let N = newMatrix[x][y-1][0]
           let O = newMatrix[x-1][y][0]
 
-          if ((!isEdge(newMatrix, x, y) || (isBlack(L) && isBlack(S) && (isBlack(N) || isBlack(O)))) == false) {
+          if ((!isEdge(newMatrix, x, y) || (checkIfPixelIsBlack(L) && checkIfPixelIsBlack(S) && (checkIfPixelIsBlack(N) || checkIfPixelIsBlack(O)))) == false) {
             noPixelsDeleted = false
+
             removeList.push({ 'x': x, 'y': y })
           }
         }
       }
     }
 
-    // Remove pixels
-    console.log(removeList.length)
     removeList.forEach((pix) => {
       newMatrix[pix.x][pix.y] = [255, 255, 255, 255]
     })
@@ -105,13 +110,13 @@ transformations.holt = (pixels) => {
       for (let x = 1; x < image.width-1; x++) {
         let color = newMatrix[x][y][0]
 
-        if (isBlack(color)) {
+        if (checkIfPixelIsBlack(color)) {
           let L = newMatrix[x+1][y][0]
           let S = newMatrix[x][y+1][0]
           let N = newMatrix[x][y-1][0]
           let O = newMatrix[x-1][y][0]
 
-          if ((!isEdge(newMatrix, x, y) || (isBlack(O) && isBlack(N) && (isBlack(S) || isBlack(L)))) == false) {
+          if ((!isEdge(newMatrix, x, y) || (checkIfPixelIsBlack(O) && checkIfPixelIsBlack(N) && (checkIfPixelIsBlack(S) || checkIfPixelIsBlack(L)))) == false) {
             noPixelsDeleted = false
             removeList.push({ 'x': x, 'y': y })
           }
@@ -119,8 +124,6 @@ transformations.holt = (pixels) => {
       }
     }
 
-    // Remove pixels
-    console.log(removeList.length)
     removeList.forEach((pix) => {
       newMatrix[pix.x][pix.y] = [255, 255, 255, 255]
     })
