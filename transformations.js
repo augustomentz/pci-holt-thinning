@@ -65,70 +65,72 @@ const isEdge = (matrix, x, y) => {
   }
 }
 
-var transformations = {}
+const holt = (image, pixels) => {
+  return new Promise((resolve) => {
+    var matrix = lodash
+      .chain(pixels)
+      .chunk(4)
+      .chunk(image.width)
+      .value()
 
-transformations.holt = (pixels) => {
-  var matrix = lodash
-    .chain(pixels)
-    .chunk(4)
-    .chunk(image.width)
-    .value()
+    var newMatrix = lodash.cloneDeep(matrix)
 
-  var newMatrix = lodash.cloneDeep(matrix)
+    var removeList = []
+    var noPixelsDeleted = false
 
-  var removeList = []
-  var noPixelsDeleted = false
+    while (noPixelsDeleted == false) {
+      noPixelsDeleted = true
 
-  while (noPixelsDeleted == false) {
-    noPixelsDeleted = true
+      for (let y = 1; y < image.height-1; y++) {
+        for (let x = 1; x < image.width-1; x++) {
+          let color = newMatrix[x][y][0]
 
-    for (let y = 1; y < image.height-1; y++) {
-      for (let x = 1; x < image.width-1; x++) {
-        let color = newMatrix[x][y][0]
+          if (checkIfPixelIsBlack(color)) {
+            let L = newMatrix[x+1][y][0]
+            let S = newMatrix[x][y+1][0]
+            let N = newMatrix[x][y-1][0]
+            let O = newMatrix[x-1][y][0]
 
-        if (checkIfPixelIsBlack(color)) {
-          let L = newMatrix[x+1][y][0]
-          let S = newMatrix[x][y+1][0]
-          let N = newMatrix[x][y-1][0]
-          let O = newMatrix[x-1][y][0]
+            if ((!isEdge(newMatrix, x, y) || (checkIfPixelIsBlack(L) && checkIfPixelIsBlack(S) && (checkIfPixelIsBlack(N) || checkIfPixelIsBlack(O)))) == false) {
+              noPixelsDeleted = false
 
-          if ((!isEdge(newMatrix, x, y) || (checkIfPixelIsBlack(L) && checkIfPixelIsBlack(S) && (checkIfPixelIsBlack(N) || checkIfPixelIsBlack(O)))) == false) {
-            noPixelsDeleted = false
-
-            removeList.push({ 'x': x, 'y': y })
+              removeList.push({ 'x': x, 'y': y })
+            }
           }
         }
       }
-    }
 
-    removeList.forEach((pix) => {
-      newMatrix[pix.x][pix.y] = [255, 255, 255, 255]
-    })
-    removeList = []
+      removeList.forEach((pix) => {
+        newMatrix[pix.x][pix.y] = [255, 255, 255, 255]
+      })
+      removeList = []
 
-    for (let y = 1; y < image.height-1; y++) {
-      for (let x = 1; x < image.width-1; x++) {
-        let color = newMatrix[x][y][0]
+      for (let y = 1; y < image.height-1; y++) {
+        for (let x = 1; x < image.width-1; x++) {
+          let color = newMatrix[x][y][0]
 
-        if (checkIfPixelIsBlack(color)) {
-          let L = newMatrix[x+1][y][0]
-          let S = newMatrix[x][y+1][0]
-          let N = newMatrix[x][y-1][0]
-          let O = newMatrix[x-1][y][0]
+          if (checkIfPixelIsBlack(color)) {
+            let L = newMatrix[x+1][y][0]
+            let S = newMatrix[x][y+1][0]
+            let N = newMatrix[x][y-1][0]
+            let O = newMatrix[x-1][y][0]
 
-          if ((!isEdge(newMatrix, x, y) || (checkIfPixelIsBlack(O) && checkIfPixelIsBlack(N) && (checkIfPixelIsBlack(S) || checkIfPixelIsBlack(L)))) == false) {
-            noPixelsDeleted = false
-            removeList.push({ 'x': x, 'y': y })
+            if ((!isEdge(newMatrix, x, y) || (checkIfPixelIsBlack(O) && checkIfPixelIsBlack(N) && (checkIfPixelIsBlack(S) || checkIfPixelIsBlack(L)))) == false) {
+              noPixelsDeleted = false
+              removeList.push({ 'x': x, 'y': y })
+            }
           }
         }
       }
+
+      removeList.forEach((pix) => {
+        newMatrix[pix.x][pix.y] = [255, 255, 255, 255]
+      })
+      removeList = []
     }
 
-    removeList.forEach((pix) => {
-      newMatrix[pix.x][pix.y] = [255, 255, 255, 255]
-    })
-    removeList = []
-  }
-
-  return lodash.flattenDeep(newMatrix)
+    console.log(lodash.flattenDeep(newMatrix))
+    
+    resolve(lodash.flattenDeep(newMatrix))
+  })
 }

@@ -12,33 +12,14 @@
           Geneva, Arial, sans-serif;
       }
 
-      .pull-left {
-        margin: 10px;
-        display: inline-block;
-        vertical-align: top;
-      }
-
-      button {
-        padding: 8px;
-      }
-
-      p {
-        font-weight: bold;
-        font-size: 18px;
-      }
-
-      .small {
-        color: #666;
-        font-weight: 400;
-        padding-top: 10px;
-        text-transform: none;
-        display: block;
+      .flex {
+        display: 'flex'
       }
     </style>
   </head>
 
   <body>
-    <button onclick="transform('holt')">Aplicar Holt</button>
+    <!-- <button onclick="transform('holt')">Aplicar Holt</button>
 
     <br />
     <br />
@@ -62,10 +43,34 @@
     <div class="pull-left">
       <p id="type"></p>
       <canvas id="new-canvas"></canvas>
+    </div> -->
+
+    <div class="flex">
+      <canvas id="image1"></canvas>
+      <canvas id="resultImage1"></canvas>
+    </div>
+
+    <div class="flex">
+      <canvas id="image2"></canvas>
+      <canvas id="resultImage2"></canvas>
+    </div>
+
+    <div class="flex">
+      <canvas id="image3"></canvas>
+      <canvas id="resultImage3"></canvas>
+    </div>
+    
+    <div class="flex">
+      <canvas id="image4"></canvas>
+      <canvas id="resultImage4"></canvas>
+    </div>
+
+    <div class="flex">
+      <canvas id="image5"></canvas>
+      <canvas id="resultImage5"></canvas>
     </div>
 
     <script src="lodash.js"></script>
-
     <script src="transformations.js"></script>
     <script src="main.js"></script>
   </body>
