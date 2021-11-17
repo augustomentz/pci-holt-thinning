@@ -13,38 +13,12 @@
       }
 
       .flex {
-        display: 'flex'
+        display: "flex";
       }
     </style>
   </head>
 
   <body>
-    <!-- <button onclick="transform('holt')">Aplicar Holt</button>
-
-    <br />
-    <br />
-
-    <p>
-      Upload de imagem quadrada:
-      <input type="file" accept="image/*" onchange="drawOriginal(event)" />
-      <small class="small">* Fundo preto para dilatação e erosão.</small>
-      <small class="small"
-        >* Para Holt use imagem preta com fundo branco.</small
-      >
-    </p>
-
-    <img id="original" style="display: none" />
-
-    <div class="pull-left">
-      <p>Original</p>
-      <canvas id="original-canvas"></canvas>
-    </div>
-
-    <div class="pull-left">
-      <p id="type"></p>
-      <canvas id="new-canvas"></canvas>
-    </div> -->
-
     <div class="flex">
       <canvas id="image1"></canvas>
       <canvas id="resultImage1"></canvas>
@@ -59,7 +33,7 @@
       <canvas id="image3"></canvas>
       <canvas id="resultImage3"></canvas>
     </div>
-    
+
     <div class="flex">
       <canvas id="image4"></canvas>
       <canvas id="resultImage4"></canvas>
@@ -71,7 +45,6 @@
     </div>
 
     <script src="lodash.js"></script>
-    <script src="transformations.js"></script>
-    <script src="main.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>
